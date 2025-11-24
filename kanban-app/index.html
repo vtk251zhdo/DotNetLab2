@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Manager Kanban Board</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="branding">
+      <div class="logo">PM</div>
+      <div>
+        <h1>Project Manager</h1>
+        <p class="subtitle">Kanban Board</p>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="filters">
+        <input type="search" id="search" placeholder="Search tasks" aria-label="Search tasks" />
+        <select id="filter-status" aria-label="Filter by status">
+          <option value="all">All Statuses</option>
+          <option value="backlog">Backlog</option>
+          <option value="todo">To Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="review">Review</option>
+          <option value="done">Done</option>
+        </select>
+        <select id="filter-priority" aria-label="Filter by priority">
+          <option value="all">All Priorities</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <button class="primary" id="add-task-btn">+ New Task</button>
+    </div>
+  </header>
+
+  <section class="stats" aria-live="polite">
+    <div class="stat">
+      <p class="label">Total Tasks</p>
+      <p class="value" id="stat-total">0</p>
+    </div>
+    <div class="stat">
+      <p class="label">In Progress</p>
+      <p class="value" id="stat-progress">0</p>
+    </div>
+    <div class="stat">
+      <p class="label">Completed</p>
+      <p class="value" id="stat-done">0</p>
+    </div>
+    <div class="stat">
+      <p class="label">Next Deadline</p>
+      <p class="value" id="stat-deadline">None</p>
+    </div>
+  </section>
+
+  <main class="board" aria-label="Kanban board">
+    <section class="column" data-status="backlog">
+      <header>
+        <h2>Backlog</h2>
+        <span class="pill" id="count-backlog">0</span>
+      </header>
+      <div class="column-body" role="list"></div>
+    </section>
+    <section class="column" data-status="todo">
+      <header>
+        <h2>To Do</h2>
+        <span class="pill" id="count-todo">0</span>
+      </header>
+      <div class="column-body" role="list"></div>
+    </section>
+    <section class="column" data-status="in-progress">
+      <header>
+        <h2>In Progress</h2>
+        <span class="pill" id="count-in-progress">0</span>
+      </header>
+      <div class="column-body" role="list"></div>
+    </section>
+    <section class="column" data-status="review">
+      <header>
+        <h2>Review</h2>
+        <span class="pill" id="count-review">0</span>
+      </header>
+      <div class="column-body" role="list"></div>
+    </section>
+    <section class="column" data-status="done">
+      <header>
+        <h2>Done</h2>
+        <span class="pill" id="count-done">0</span>
+      </header>
+      <div class="column-body" role="list"></div>
+    </section>
+  </main>
+
+  <dialog id="task-modal">
+    <form id="task-form" method="dialog">
+      <header class="modal-header">
+        <h3 id="modal-title">New Task</h3>
+        <button type="button" class="icon-btn" id="close-modal" aria-label="Close">✕</button>
+      </header>
+      <div class="grid">
+        <label>
+          <span>Title</span>
+          <input type="text" name="title" id="title" required maxlength="80" />
+        </label>
+        <label>
+          <span>Assignee</span>
+          <input type="text" name="assignee" id="assignee" placeholder="Name" />
+        </label>
+        <label>
+          <span>Priority</span>
+          <select name="priority" id="priority" required>
+            <option value="high">High</option>
+            <option value="medium" selected>Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </label>
+        <label>
+          <span>Status</span>
+          <select name="status" id="status" required>
+            <option value="backlog">Backlog</option>
+            <option value="todo">To Do</option>
+            <option value="in-progress">In Progress</option>
+            <option value="review">Review</option>
+            <option value="done">Done</option>
+          </select>
+        </label>
+        <label>
+          <span>Due Date</span>
+          <input type="date" name="dueDate" id="dueDate" />
+        </label>
+      </div>
+      <label>
+        <span>Description</span>
+        <textarea name="description" id="description" rows="4" placeholder="Task details, acceptance criteria, links..."></textarea>
+      </label>
+      <footer class="modal-footer">
+        <button type="button" class="ghost" id="delete-task">Delete</button>
+        <div class="spacer"></div>
+        <button type="button" class="ghost" id="cancel-modal">Cancel</button>
+        <button type="submit" class="primary" id="save-task">Save Task</button>
+      </footer>
+      <input type="hidden" name="id" id="task-id" />
+    </form>
+  </dialog>
+
+  <template id="task-template">
+    <article class="card" draggable="true" role="listitem">
+      <header class="card-header">
+        <span class="badge"></span>
+        <div class="meta">
+          <p class="title"></p>
+          <p class="assignee"></p>
+        </div>
+        <button class="icon-btn">⋮</button>
+      </header>
+      <p class="description"></p>
+      <footer class="card-footer">
+        <span class="pill due"></span>
+        <span class="pill status"></span>
+      </footer>
+    </article>
+  </template>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
